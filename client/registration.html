@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<title>Forum: Registration Form</title>
+</head>
+
+<body>
+	<header class="jumbotron">
+			<div class="col-sm-12 col-xs-12">
+				<img src="/static/imgs/sjsu.jpg" alt="sjsu picture" class="img-responsive"/>
+			</div>
+	</header>
+	<div class="row row-content">
+		<div class="col-xs-offset-1 col-xs-12">
+			<h2>Registration Form</h2>
+		</div>
+		<div class="col-xs-12">
+			<form class="form-horizontal" role ="form" id = "signUpForm">
+			<div class="form-group">
+				<label for="email" class="col-sm-2 control-label">Email</label>
+				<div class ="col-sm-9">
+					<input type="text" class="form-control" name="email" placeholder="Please enter your email"></input>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="password" class="col-sm-2 control-label">Password</label>
+				<div class ="col-sm-9">
+					<input type="password" class="form-control" name="password" placeholder="Please enter your password"></input>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-offset-2 col-sm-2">
+					<button class="btn btn-primary" id ="signupBtn">Submit</button>
+				</div>
+			</div>
+		</form>
+		</div>
+	</div>
+	<footer class="row-footer">
+		<div class="container">
+		</div>
+	</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+  $("#signupBtn").click(function(event) {
+  event.preventDefault();
+    $.ajax({
+      url: 'http://127.0.0.1:5000/signup',
+      data: $('#signUpForm').serialize(),
+      type: 'POST',
+      success: function(response) {
+        console.log(response);
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>
