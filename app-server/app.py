@@ -107,15 +107,15 @@ This is the API for getting the thread for certain field
 @app.route('/getThread', methods=['GET'])
 def getThread():
     threads = mongo.db.thread
+
     fieldSearch = request.args.get('topic')
-    # fieldSearch = "sports"  
     if request.method == 'GET':
         result = []
         idArr = []
         for thread in threads.find({"topic": fieldSearch }, {"_id":0}):
             result.append(thread)
         jsonStr = json.dumps(result)
-
+    
     return jsonStr
 
 """
