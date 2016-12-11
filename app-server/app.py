@@ -2,12 +2,24 @@ from flask import Flask
 from flask import request
 from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
+from flask_mail import Mail
+from flask_mail import Message
 from flask import json
 from random import randint
 import datetime
 
 app = Flask(__name__)
 mongo = PyMongo(app)
+app.config.update(dict(
+    DEBUG = True,
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = 587,
+    MAIL_USE_TLS = True,
+    MAIL_USE_SSL = False,
+    MAIL_USERNAME = 'cmpe280sjsu@gmail.com',
+    MAIL_PASSWORD = 'CMPE@*)sjsu',
+))
+mail = Mail(app)
 CORS(app)
 
 @app.route('/')
@@ -132,6 +144,17 @@ def replyThread():
     threads.update({"sessionid": sessionidInput}, {"$inc": {"replynumber": 1}})
     
     return "reply works!"
+
+"""
+This is the API for contact us
+"""
+@app.route("/contact", methods=['POST'])
+def contact():
+    curTime = datetime.date.today().strftime("%B %d, %Y")
+    msg = Message("Hello", sender="cmpe280sjsu@gmail.com", recipients=["vincent881229@gmail.com"])
+    mail.send(msg)
+    return "success"
+
 
 if __name__ == '__main__':
   app.run(debug = True)
