@@ -287,7 +287,7 @@ var ThreadListComponent = React.createClass({
     var topic = this.props.params.topic;
     console.log(topic);
     $.ajax({
-      // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/getThread',
+      // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/getThread?topic=' + topic,
       url: 'http://127.0.0.1:5000/getThread?topic=' + topic,
       type: 'GET',
       success: function(response) {
@@ -319,7 +319,7 @@ var ThreadListComponent = React.createClass({
       var user = $.parseJSON(localStorage.getItem('currentUser'))[0];
 
       $.ajax({
-        // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/signup',
+        // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/thread',
         url: 'http://127.0.0.1:5000/thread',
         data: { title:$("#title").val(), content:$("#content").val(), topic: this.props.params.topic, userid:user.user_id, username:user.name},
         type: 'POST',
@@ -467,7 +467,7 @@ var ThreadComponent = React.createClass({
     // console.log(this.props.params.sessionid);
     var sessionid = this.props.params.sessionid;
     $.ajax({
-      // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/getThreadBySession',
+      // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/getThreadBySession?sessionid=' + sessionid,
       url: 'http://127.0.0.1:5000/getThreadBySession?sessionid=' + sessionid,
       type: 'GET',
       success: function(response) {
