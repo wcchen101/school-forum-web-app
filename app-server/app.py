@@ -222,14 +222,17 @@ def getThreadBySession():
 
 
 """
-This is the API for contact us
+This is the API for contact us, ex: sender: "cmpe280sjsu@gmail.com"
 """
 @app.route("/contact", methods=['POST'])
 def contact():
     curTime = datetime.date.today().strftime("%B %d, %Y")
-    msg = Message("Hello", sender="cmpe280sjsu@gmail.com", recipients=["vincent881229@gmail.com"])
+    msgTitleInput = request.form['title']
+    msgEmailInput = request.form['email']
+    msg = Message(msgTitleInput, sender= msgEmailInput, recipients=["vincent881229@gmail.com"])
+    msg.body = request.form['body']
     mail.send(msg)
-    return "success"
+    return "contact us successfully"
 
 if __name__ == '__main__':
   app.run(debug = True)
