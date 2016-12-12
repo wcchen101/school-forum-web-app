@@ -23,7 +23,7 @@ def signup():
     passwordInput = request.form['password']
     nameInput = request.form['name']
     majorInput = request.form['major']
-    userID = randint(0,10000)  
+    userID = randint(0,10000)
     validID = False
     print(userID)  
     users = mongo.db.user
@@ -34,7 +34,7 @@ def signup():
     validID = True 
 
     if validID is True and emailInput and passwordInput and nameInput and majorInput:
-        users.insert({'user_id': userID, 'email': emailInput, 'password': passwordInput, 'name': nameInput, 'major': majorInput})
+        users.insert({'userid': userID, 'email': emailInput, 'password': passwordInput, 'name': nameInput, 'major': majorInput})
         return "sucessfully get the input, and insert the data"
 
     else:
@@ -79,6 +79,7 @@ def thread():
     titleInput = request.form['title']
     contentInput = request.form['content']
     useridInput = request.form['userid']
+    userNameInput = request.form['username']
     topicInput = request.form['topic']
     curTime = datetime.date.today().strftime("%B %d, %Y")
     sessionid = randint(0,10000)
@@ -89,6 +90,7 @@ def thread():
         threads.insert({
            'sessionid': sessionid,
            'userid': useridInput,
+           'username': userNameInput,
            'replynumber': 0,
            'title': titleInput,
            'content': contentInput,
@@ -107,15 +109,15 @@ This is the API for getting the thread for certain field
 @app.route('/getThread', methods=['GET'])
 def getThread():
     threads = mongo.db.thread
-
     fieldSearch = request.args.get('topic')
+
     if request.method == 'GET':
         result = []
         idArr = []
-        for thread in threads.find({"topic": fieldSearch }, {"_id":0}):
+        for thread in threads.find({"topic": fieldSearch}, {"_id":0}):
             result.append(thread)
         jsonStr = json.dumps(result)
-    
+
     return jsonStr
 
 """
@@ -123,15 +125,88 @@ This is the API for replying the thread
 """
 @app.route('/replyThread', methods=['POST'])
 def replyThread():
+    
     threads = mongo.db.thread
     curTime = datetime.date.today().strftime("%B %d, %Y")
-    sessionidInput = 2340
-    useridInput = "12"
-    contentInput = "sucess!"
-    threads.update({"sessionid": sessionidInput},{ "$push": {"reply": {"$each": [{"userid": useridInput, "content": contentInput, "time": curTime}]}}})
-    threads.update({"sessionid": sessionidInput}, {"$inc": {"replynumber": 1}})
+    sessionidInput = request.form['sessionid']
+    int_sessionInput = int(sessionidInput)
+    useridInput = request.form['userid']
+    usernameInput = request.form['username']
+    contentInput = request.form['content']
+    threads.update({"sessionid": int_sessionInput},{ "$push": {"reply": {"$each": [{"userid": useridInput, "username": usernameInput, "content": contentInput, "time": curTime}]}}})
+    threads.update({"sessionid": int_sessionInput}, {"$inc": {"replynumber": 1}})
     
     return "reply works!"
+
+"""
+This is the API for updating the user profile
+"""
+@app.route('/updateUser', methods=['POST'])
+def updateUser():
+    userPasswordInput = request.form['password']
+    userMajorInput = request.form['major']
+    userNameInput = request.form['name']
+    useridInput = request.form['userid']
+    int_useridInput = int(useridInput)
+    users = mongo.db.user
+    users.update({"userid": int_useridInput}, {"$set": {"password": userPasswordInput, "name": userNameInput, "major": userMajorInput}})
+
+    return "update sucess"
+
+"""
+This is the API for getting top 3 reply thread in each 
+return value: json object like {[study], [life], [career], [events]}
+"""
+@app.route('/getTopThread', methods=['POST'])
+def getTopThread():
+    threads = mongo.db.thread
+
+    resultStudy = []
+    resultJob = []
+    resultSport = []
+    jsonArr = []
+
+    # studyObj = threads.find({"topic":"study"}, {"_id":0}).limit(3).sort({"replynumber":-1})
+    # print(studyObj)
+    for thread in threads.find({"topic":"study"}, {"_id":0}).limit(3).sort("replynumber", -1):
+        resultStudy.append(thread)
+    jsonArr.append(resultStudy)
+
+    for thread in threads.find({"topic":"life"}, {"_id":0}).limit(3).sort("replynumber", -1):
+        resultSport.append(thread)
+    jsonArr.append(resultSport)
+
+    for thread in threads.find({"topic":"career"}, {"_id":0}).limit(3).sort("replynumber",-1):
+        resultJob.append(thread)
+    jsonArr.append(resultJob)
+
+    for thread in threads.find({"topic":"events"}, {"_id":0}).limit(3).sort("replynumber",-1):
+        resultJob.append(thread)
+    jsonArr.append(resultJob)
+
+    jsonStr = json.dumps(jsonArr)
+
+    return jsonStr
+
+"""
+This is the API for getting thread regarding to each sessionid
+"""
+@app.route('/getThreadBySession', methods = ['GET'])
+def getThreadBySession():
+
+    threads = mongo.db.thread    
+    sessionIdSearch = request.args.get('sessionid')
+    int_essionIdSearch = int(sessionIdSearch)
+    print(int_essionIdSearch)
+    if request.method == 'GET':
+        result = []
+        idArr = []
+        for thread in threads.find({"sessionid": int_essionIdSearch}, {"_id":0}):
+            result.append(thread)
+        jsonStr = json.dumps(result)
+
+    return jsonStr    
+
 
 if __name__ == '__main__':
   app.run(debug = True)
