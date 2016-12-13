@@ -102,26 +102,31 @@ render: function() {
     // Normal Case
     tops1 = this.state.tops[0].map(function(item) {
       return (
-        <div className="ellipses"><Link to={"/topics/study/" + item.sessionid}>{item.title}</Link></div>
+        <div className="ellipses"><Link to={"/topics/study/" + item.sessionid}>
+          ({item.replynumber}+) {item.title}
+        </Link></div>
       );
     });
 
     tops2 = this.state.tops[1].map(function(item) {
       return (
-        <div className="ellipses"><Link to={"/topics/life/" + item.sessionid}>{item.title}</Link></div>
-      );
+        <div className="ellipses"><Link to={"/topics/life/" + item.sessionid}>
+          ({item.replynumber}+) {item.title}
+        </Link></div>      );
     });
 
     tops3 = this.state.tops[2].map(function(item) {
       return (
-        <div className="ellipses"><Link to={"/topics/career/" + item.sessionid}>{item.title}</Link></div>
-      );
+        <div className="ellipses"><Link to={"/topics/career/" + item.sessionid}>
+          ({item.replynumber}+) {item.title}
+        </Link></div>      );
     });
 
     tops4 = this.state.tops[3].map(function(item) {
       return (
-        <div className="ellipses"><Link to={"/topics/events/" + item.sessionid}>{item.title}</Link></div>
-      );
+        <div className="ellipses"><Link to={"/topics/events/" + item.sessionid}>
+          ({item.replynumber}+) {item.title}
+        </Link></div>      );
     });
   }
 
@@ -523,7 +528,7 @@ var ThreadListComponent = React.createClass({
                 </Link>
               </div>
               <div>
-                <p className="post-info"><span>{item.replynumber} Replies,</span> <span>Posted On: {item.time}</span></p>
+                <p className="post-info"><span>{item.replynumber} Replies,</span>&nbsp;&nbsp;&nbsp;<span>Posted On: {item.time}</span></p>
               </div>
             </div>
           </div>
@@ -693,7 +698,7 @@ var ThreadComponent = React.createClass({
                   <p>{this.state.curr.content}</p>
                 </div>
                 <div className="pull-left">
-                  <p className="post-info"><span>Posted On: {this.state.curr.time}</span></p>
+                  <p className="post-info"><span>{this.state.curr.replynumber} Replies,</span>&nbsp;&nbsp;&nbsp;<span>Posted On: {this.state.curr.time}</span></p>
                 </div>
                 <div className="post-button pull-right">
                   <a href="#reply-div" className="btn btn-info" role="button">Reply</a>
