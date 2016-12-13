@@ -9,13 +9,68 @@ var destination = document.querySelector("#container");
 var currentTopic;
 var currentThreads;
 var loginStatus = false;
+var alertMessage;
+
+
+var o = {};
+
+var Store = {
+  saveThreadList: function(state, topic) {
+    o['threads'] = state;
+    o['topic'] = topic;
+  },
+  getThreadList: function() {
+    return o['threads'];
+  },
+  getThreadTopic: function () {
+    return o['topic'];
+  }
+};
+
+
 
 var Home = React.createClass({
 
-contact: function () {
+  getInitialState: function() {
+    return {
+      tops: undefined
+    }
+  },
+
+  componentDidMount: function(){
+    this.getTopThread();
+
+  },
+
+  componentWillReceiveProps: function(nextProps){
+    this.getTopThread();
+  },
+
+getTopThread: function () {
+
   $.ajax({
-    // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/contact',
-    url: 'http://127.0.0.1:5000/contact',
+    url: 'http://ec2-54-183-220-7.us-west-1.compute.amazonaws.com/getTopThread',
+    // url: 'http://127.0.0.1:5000/getTopThread',
+    type: 'POST',
+    success: function(response) {
+      console.log("top threads success");
+      console.log(response);
+      var obj = $.parseJSON(response);
+      this.setState({tops: obj});
+    }.bind(this),
+    error: function(error) {
+      console.log("top threads fail");
+      console.log(error);
+    }
+  });
+
+},
+
+contact: function (event) {
+  event.preventDefault();
+  $.ajax({
+    url: 'http://ec2-54-183-220-7.us-west-1.compute.amazonaws.com/contact',
+    // url: 'http://127.0.0.1:5000/contact',
     data: $('#contact-form').serialize(),
     type: 'POST',
     success: function(response) {
@@ -31,6 +86,45 @@ contact: function () {
 },
 
 render: function() {
+
+  var tops1, tops2, tops3, tops4;
+
+  // Response is not here yet
+  if ( !this.state.tops ) {
+    return <div>Loading..</div>
+  }
+
+  // Result array is empty
+  if ( this.state.tops.length === 0 ) {
+    tops = <div><h3>No result found..</h3></div>;
+
+  } else {
+    // Normal Case
+    tops1 = this.state.tops[0].map(function(item) {
+      return (
+        <div className="ellipses"><Link to={"/topics/study/" + item.sessionid}>{item.title}</Link></div>
+      );
+    });
+
+    tops2 = this.state.tops[1].map(function(item) {
+      return (
+        <div className="ellipses"><Link to={"/topics/life/" + item.sessionid}>{item.title}</Link></div>
+      );
+    });
+
+    tops3 = this.state.tops[2].map(function(item) {
+      return (
+        <div className="ellipses"><Link to={"/topics/career/" + item.sessionid}>{item.title}</Link></div>
+      );
+    });
+
+    tops4 = this.state.tops[3].map(function(item) {
+      return (
+        <div className="ellipses"><Link to={"/topics/events/" + item.sessionid}>{item.title}</Link></div>
+      );
+    });
+  }
+
     return (
       <div>
         <div>
@@ -104,6 +198,45 @@ render: function() {
           </section>
         </div>
 
+        <div className="container">
+          <section>
+            <div className="page-header" id="hottopic">
+              <h2>Top Posts</h2>
+            </div>{/* End Page Header */}
+            <div className="row">
+              <div className="col-sm-3">
+                <blockquote className="studytopic">
+                  <h4 className="topic">Study</h4>
+                  <hr />
+                  {tops1}
+                </blockquote>
+              </div>
+              <div className="col-sm-3">
+                <blockquote className="lifetopic">
+                  <h4 className="topic">Life</h4>
+                  <hr />
+                  {tops2}
+                </blockquote>
+              </div>
+
+              <div className="col-sm-3">
+                <blockquote className="jobreference">
+                  <h4 className="topic">Career</h4>
+                  <hr />
+                  {tops3}
+                </blockquote>
+              </div>
+
+              <div className="col-sm-3">
+                <blockquote className="discusstopic">
+                  <h4 className="topic">Events</h4>
+                  <hr />
+                  {tops4}
+                </blockquote>
+              </div>
+            </div>
+          </section>
+        </div> {/* End of Recent Post Section */}
 
 
         <div className="container">
@@ -174,19 +307,19 @@ render: function() {
                   <div className="form-group">
                     <label htmlFor="user-email" className="col-sm-2 control-label">Email</label>
                     <div className="col-sm-10">
-                      <input type="text" className="form-control" id="user-email" placeholder="Please enter your Email" />
+                      <input type="text" name="email" className="form-control" id="user-email" placeholder="Please enter your Email" />
                     </div>
                   </div>{/* End Form Group */}
                   <div className="form-group">
                     <label htmlFor="user-url" className="col-sm-2 control-label">Title</label>
                     <div className="col-sm-10">
-                      <input type="text" className="form-control" id="user-url" placeholder="Title" />
+                      <input type="text" name="title" className="form-control" id="user-url" placeholder="Title" />
                     </div>
                   </div>{/* End Form Group */}
                   <div className="form-group">
                     <label htmlFor="user-message" className="col-sm-2 control-label">Any Message</label>
                     <div className="col-sm-10">
-                      <textarea name="user-message" id="user-message" className="form-control" cols={20} rows={10} placeholder="Enter Your Message" defaultValue={""} />
+                      <textarea name="body" id="user-message" className="form-control" cols={20} rows={10} placeholder="Enter Your Message" defaultValue={""} />
                     </div>
                   </div>{/* End Form Group */}
                   <div className="form-group">
@@ -203,6 +336,7 @@ render: function() {
     );
   }
 });
+
 
 
 var TopicComponent = React.createClass({
@@ -276,19 +410,36 @@ var ThreadListComponent = React.createClass({
   },
 
   componentDidMount: function(){
+
     this.getThreads();
+
+    // var topic = this.props.params.topic;
+    // var state = Store.getThreadList();
+    // var storeTopic = Store.getThreadTopic();
+    // if (storeTopic === topic) {
+    //   this.setState(state);
+    // } else {
+    //   this.getThreads();
+    // }
+
+  },
+
+  componentWillUnmount: function() {
+    // Store.saveThreadList(this.state, this.props.params.topic);
   },
 
   componentWillReceiveProps: function(nextProps){
     this.getThreads();
   },
 
+
+
   getThreads: function() {
     var topic = this.props.params.topic;
     console.log(topic);
     $.ajax({
-      // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/getThread?topic=' + topic,
-      url: 'http://127.0.0.1:5000/getThread?topic=' + topic,
+      url: 'http://ec2-54-183-220-7.us-west-1.compute.amazonaws.com/getThread?topic=' + topic,
+      // url: 'http://127.0.0.1:5000/getThread?topic=' + topic,
       type: 'GET',
       success: function(response) {
         console.log("success");
@@ -313,15 +464,14 @@ var ThreadListComponent = React.createClass({
   },
 
   postNewThread: function () {
-
-
+    console.log(localStorage.getItem('loginStatus'));
     if (localStorage.getItem('loginStatus') == "true") {
       var user = $.parseJSON(localStorage.getItem('currentUser'))[0];
-
+      console.log()
       $.ajax({
-        // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/thread',
-        url: 'http://127.0.0.1:5000/thread',
-        data: { title:$("#title").val(), content:$("#content").val(), topic: this.props.params.topic, userid:user.user_id, username:user.name},
+        url: 'http://ec2-54-183-220-7.us-west-1.compute.amazonaws.com/thread',
+        // url: 'http://127.0.0.1:5000/thread',
+        data: { title:$("#title").val(), content:$("#content").val(), topic: this.props.params.topic, userid:user.userid, username:user.name},
         type: 'POST',
         success: function(response) {
           console.log("success");
@@ -443,8 +593,8 @@ var ThreadComponent = React.createClass({
     if (localStorage.getItem('loginStatus') == "true") {
       var user = $.parseJSON(localStorage.getItem('currentUser'))[0];
       $.ajax({
-            // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/replyThread',
-            url: 'http://127.0.0.1:5000/replyThread',
+            url: 'http://ec2-54-183-220-7.us-west-1.compute.amazonaws.com/replyThread',
+            // url: 'http://127.0.0.1:5000/replyThread',
             data: {content:$("#reply-content").val(), sessionid:this.props.params.sessionid, userid:user.userid, username:user.name},
             type: 'POST',
             success: function(response) {
@@ -467,8 +617,8 @@ var ThreadComponent = React.createClass({
     // console.log(this.props.params.sessionid);
     var sessionid = this.props.params.sessionid;
     $.ajax({
-      // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/getThreadBySession?sessionid=' + sessionid,
-      url: 'http://127.0.0.1:5000/getThreadBySession?sessionid=' + sessionid,
+      url: 'http://ec2-54-183-220-7.us-west-1.compute.amazonaws.com/getThreadBySession?sessionid=' + sessionid,
+      // url: 'http://127.0.0.1:5000/getThreadBySession?sessionid=' + sessionid,
       type: 'GET',
       success: function(response) {
         console.log("success");
@@ -610,6 +760,12 @@ var ProfileComponent = React.createClass({
         <div className="row">
         <div className="col-md-8 col-md-offset-2">
         <h2>My Profile</h2>
+        <div className="media">
+        <div className="profile-img" href="#">
+          <img className="media-object user-pic" src="img/icon-user-default.png" alt="Generic placeholder image" />
+        </div>
+
+      </div>
           {userInfo}
         </div>
         </div>
@@ -640,8 +796,8 @@ var App = React.createClass({
   login: function (event) {
     event.preventDefault();
     $.ajax({
-      // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/login',
-      url: 'http://127.0.0.1:5000/login',
+      url: 'http://ec2-54-183-220-7.us-west-1.compute.amazonaws.com/login',
+      // url: 'http://127.0.0.1:5000/login',
       data: $('#login-form').serialize(),
       type: 'POST',
       success: function(response) {
@@ -670,8 +826,8 @@ var App = React.createClass({
   register: function (event) {
     event.preventDefault();
     $.ajax({
-          // url: 'http://ec2-54-153-75-178.us-west-1.compute.amazonaws.com/signup',
-          url: 'http://127.0.0.1:5000/signup',
+          url: 'http://ec2-54-183-220-7.us-west-1.compute.amazonaws.com/signup',
+          // url: 'http://127.0.0.1:5000/signup',
           data: $('#signup-form').serialize(),
           type: 'POST',
           success: function(response) {
@@ -692,7 +848,7 @@ var App = React.createClass({
     this.setState({loggedin: false, user: undefined});
     localStorage.setItem('loginStatus', false);
     localStorage.setItem('currentUser', "");
-    // console.log(localStorage.getItem('loginStatus'));
+    console.log(localStorage.getItem('loginStatus'));
   },
 
   render: function () {
@@ -842,13 +998,14 @@ var App = React.createClass({
 });
 
 $(document).ready(function() {
+  console.log(localStorage.getItem('loginStatus'));
 
   ReactDOM.render(
     <Router>
       <Route path="/" component={App}>
         <IndexRoute component={Home}/>
         <Route path="topics/:topic" component={ThreadListComponent} handler={this.getThreads} />
-        <Route path="topics/:topic/:sessionid" component={ThreadComponent} />
+        <Route path="topics/:topic/:sessionid" component={ThreadComponent} handler={this.getThreadBySession} />
         <Route path="topics" component={TopicComponent} />
         <Route path="profile" component={ProfileComponent} />
 

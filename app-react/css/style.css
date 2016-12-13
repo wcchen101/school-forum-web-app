@@ -109,3 +109,18 @@ body {
   position: relative;
   left: -10px;
 }
+
+.post-info {
+}
+.post-info span {
+    position: relative;;
+    bottom: -12px;
+}
+
+.profile-img {
+  margin-bottom: 20px;
+}
+
+.profile-img img {
+  max-width: 100px;
+}
