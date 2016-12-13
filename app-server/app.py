@@ -175,31 +175,32 @@ def getTopThread():
     threads = mongo.db.thread
 
     resultStudy = []
-    resultJob = []
-    resultSport = []
+    resultLife = []
+    resultCareer = []
+    resultEvents = []
     jsonArr = []
 
-    # studyObj = threads.find({"topic":"study"}, {"_id":0}).limit(3).sort({"replynumber":-1})
-    # print(studyObj)
     for thread in threads.find({"topic":"study"}, {"_id":0}).limit(3).sort("replynumber", -1):
         resultStudy.append(thread)
     jsonArr.append(resultStudy)
 
     for thread in threads.find({"topic":"life"}, {"_id":0}).limit(3).sort("replynumber", -1):
-        resultSport.append(thread)
-    jsonArr.append(resultSport)
+        resultLife.append(thread)
+    jsonArr.append(resultLife)
 
     for thread in threads.find({"topic":"career"}, {"_id":0}).limit(3).sort("replynumber",-1):
-        resultJob.append(thread)
-    jsonArr.append(resultJob)
+        resultCareer.append(thread)
+    jsonArr.append(resultCareer)
 
     for thread in threads.find({"topic":"events"}, {"_id":0}).limit(3).sort("replynumber",-1):
-        resultJob.append(thread)
-    jsonArr.append(resultJob)
+        resultEvents.append(thread)
+    jsonArr.append(resultEvents)
 
     jsonStr = json.dumps(jsonArr)
 
     return jsonStr
+
+
 
 """
 This is the API for getting thread regarding to each sessionid
