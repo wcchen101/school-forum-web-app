@@ -1,0 +1,311 @@
+@keyframes changecolor {
+    from {
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+    }
+
+    to {
+        background: rgba(0, 0, 0, 0);
+        color: #E5A823;
+    }
+}
+
+@-webkit-keyframes changecolor {
+    from {
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+    }
+
+    to {
+        background: rgba(0, 0, 0, 0);
+        color: #E5A823;
+    }
+}
+
+body {
+    padding-top: 0px;
+}
+
+.container {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.navbarcolor {
+    background-color: #E5A823;
+}
+
+/*#navcolor {
+    color: #0055A2;
+}*/
+
+.navbar-default .navbar-nav > li > a {
+    color: #0055A2;
+}
+
+.studytopic {
+    background-color: #00BCD4;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 50px 25px
+}
+
+.lifetopic {
+    background-color: #939597;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 50px 25px
+}
+
+.discusstopic {
+    background-color: #E5A823;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 25px 50px
+}
+
+.jobreference {
+    background-color: lightskyblue;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 25px 50px
+}
+
+.row {
+    background-color: transparent;
+}
+
+.topic {
+    text-align: center;
+}
+
+.ellipses {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    margin-left: 2px;
+    margin-right: 2px;
+    font-size: 14px;
+}
+/*
+a:link {
+    color: white;
+}*/
+
+/*a:visited {
+    color: darkred;
+}*/
+
+
+
+div.customizeWidth {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+
+.studyGallery {
+    background-image: url("../img/study.png");
+    width: 390px;
+    height: 292.5px;
+}
+
+.lifeGallery {
+    background-image: url("../img/life.jpg");
+    width: 390px;
+    height: 292.5px;
+}
+
+.careerGallery {
+    background-image: url("../img/career.jpg");
+    width: 390px;
+    height: 292.5px;
+}
+
+.transportGallery {
+    background-image: url("../img/transport.jpg");
+    width: 390px;
+    height: 292.5px;
+}
+
+.eventGallery {
+    background-image: url("../img/events.jpg");
+    width: 390px;
+    height: 292.5px;
+}
+
+.travelGallery {
+    background-image: url("../img/travel.jpg");
+    width: 390px;
+    height: 292.5px;
+}
+
+.pictureShadow1 {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 48px;
+}
+
+.pictureShadow1:hover {
+    animation: changecolor 2s;
+    -webkit-animation: changecolor 2s;
+}
+
+.pictureShadow2 {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 48px;
+}
+
+.pictureShadow2:hover {
+    animation-duration: 2s;
+    animation-name: changecolor;
+    -webkit-animation: changecolor 2s;
+}
+
+.pictureShadow3 {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 48px;
+}
+
+.pictureShadow3:hover {
+    animation-duration: 2s;
+    animation-name: changecolor;
+    -webkit-animation: changecolor 2s;
+}
+
+.pictureShadow4 {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 48px;
+}
+
+.pictureShadow4:hover {
+    animation-duration: 2s;
+    animation-name: changecolor;
+    -webkit-animation: changecolor 2s;
+}
+
+.pictureShadow5 {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 48px;
+}
+
+.pictureShadow5:hover {
+    animation-duration: 2s;
+    animation-name: changecolor;
+    -webkit-animation: changecolor 2s;
+}
+
+.pictureShadow6 {
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: center;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 48px;
+}
+
+.pictureShadow6:hover {
+    animation-duration: 2s;
+    animation-name: changecolor;
+    -webkit-animation: changecolor 2s;
+}
+
+div.contactContainer {
+    background-color: skyblue;
+}
+
+img.photoHolder {
+    border-radius: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contactContainer {
+  height: 100%;
+}
+
+a:visited {
+  color: #0055A2;
+}
+
+/*a:hover {
+    background-color: #E5A823;
+}*/
+
+.nav .navbar-nav > .open > a,
+.nav .navbar-nav > .open > a:hover,
+.nav .navbar-nav > .open > a:focus {
+    color: #555;
+    background-color: #E5A823;
+}
+
+
+.nav .navbar-nav > .active > a,
+.nav .navbar-nav > .active > a:hover,
+.nav .navbar-nav > .active > a:focus {
+    color: #555;
+    background-color: #E5A823;
+}
+
+.navbar-nav > li > a:hover,
+.navbar-nav > li > a:focus {
+  color: #555;
+  background-color: #0099FF;
+}
+
+.active {
+  background-color: #0099FF;
+}
